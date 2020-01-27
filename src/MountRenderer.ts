@@ -123,7 +123,16 @@ export default class MountRenderer implements AbstractMountRenderer {
       composed: args.composed,
       cancelable: args.cancelable,
     });
-    Object.assign(event, args);
+
+    const props = Object.entries(args).reduce(
+      (accum, [key, value]) => ({
+        ...accum,
+        [key]: { value },
+      }),
+      {}
+    );
+
+    Object.defineProperties(event, props);
 
     act(() => {
       node.instance.dispatchEvent(event);
